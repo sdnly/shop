@@ -3,10 +3,8 @@ package com.example.shop.model;
 
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Data
@@ -19,5 +17,8 @@ public class Product {
     private String description;
     private int inStock;
     private int price;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    private ProductCart productCart;
 
 }

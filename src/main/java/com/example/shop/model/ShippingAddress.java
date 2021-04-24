@@ -2,10 +2,7 @@ package com.example.shop.model;
 
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @Data
@@ -19,4 +16,8 @@ public class ShippingAddress {
         private String lastName;
         private String street;
         private String zipCode;
+
+        @ManyToOne
+        @JoinColumn(name = "customer_order_id")
+        private Order order;
 }
