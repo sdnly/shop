@@ -10,7 +10,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -36,6 +38,13 @@ public class ProductService {
 //    }
 
 
+    public List<Product> sortedProductsByName() {
+        List<Product> all = productRepository.findAll();
+        List<Product> collect = all.stream()
+                .sorted(Comparator.comparing(Product::getPrice))
+                .collect(Collectors.toList());
+        return collect;
+    }
 
     public ProductDto getSingleProduct(long id) {
         Product product = productRepository.findById(id).orElseThrow();

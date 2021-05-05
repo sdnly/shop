@@ -5,6 +5,9 @@ import com.example.shop.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
+import java.io.IOException;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/order")
@@ -19,8 +22,8 @@ public class OrderController {
         }
 
         @PostMapping
-        public void cartToOrder(@RequestParam long id, long billingId, long shippingId) {
-            orderService.cartToOrder(id, billingId, shippingId);
+        public void checkOut(@RequestParam long id, long billingId, long shippingId) throws MessagingException, IOException {
+            orderService.checkOut(id, billingId, shippingId);
         }
 
 }

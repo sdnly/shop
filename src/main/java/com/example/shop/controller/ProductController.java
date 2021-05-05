@@ -1,6 +1,7 @@
 package com.example.shop.controller;
 
 import com.example.shop.dto.ProductDto;
+import com.example.shop.model.Product;
 import com.example.shop.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +16,11 @@ public class ProductController {
     private final ProductService productService;
 
 
+
+    @GetMapping("/sorted")
+    public List<Product> sortedProductsByName() {
+        return productService.sortedProductsByName();
+    }
 
     @GetMapping
     public List<ProductDto> getAllProducts() {

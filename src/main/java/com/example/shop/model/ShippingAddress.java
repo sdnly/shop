@@ -16,6 +16,7 @@ public class ShippingAddress {
         private String lastName;
         private String street;
         private String zipCode;
+        private String mail;
 
         @ManyToOne
         @JoinColumn(name = "customer_order_id")
