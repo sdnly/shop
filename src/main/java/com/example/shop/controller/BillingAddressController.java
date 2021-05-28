@@ -1,5 +1,6 @@
 package com.example.shop.controller;
 
+import com.example.shop.dto.BillingAddressDto;
 import com.example.shop.model.BillingAddress;
 import com.example.shop.service.BillingAddressService;
 import lombok.RequiredArgsConstructor;
@@ -15,8 +16,8 @@ public class BillingAddressController {
         private final BillingAddressService billingAddressService;
 
         @PostMapping
-        public BillingAddress addBillingAddress(BillingAddress billingAddress) {
-                return billingAddressService.addBillingAddress(billingAddress);
+        public BillingAddressDto addBillingAddress(BillingAddressDto billingAddressDto) {
+                return billingAddressService.addBillingAddress(billingAddressDto);
         }
 
 }

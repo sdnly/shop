@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,20 +20,12 @@ public class ProductCart {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-//    @OneToOne(cascade = CascadeType.ALL)
-//    private Order order;
-
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = {CascadeType.MERGE})
     private List<Product> productList = new ArrayList<>();
-
-    private int qty;
 
     private int total;
 
-    private LocalDateTime createdCart;
-
-
-    public ProductCart(List<Product> productList, LocalDateTime createdCart) {
+    public ProductCart(List<Product> productList) {
 
     }
 }

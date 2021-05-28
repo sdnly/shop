@@ -9,6 +9,6 @@ import java.util.List;
 public interface ProductCartMapper {
 
     ProductCartDto toDto(ProductCart source);
-    ProductCart toEntity(ProductDto source);
+    ProductCart toEntity(ProductCartDto source);
     List<ProductCartDto> toDtos(List<ProductCart> source);
 }

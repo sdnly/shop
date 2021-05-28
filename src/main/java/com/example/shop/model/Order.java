@@ -4,20 +4,22 @@ import lombok.Data;
 import lombok.ToString;
 
 import javax.persistence.*;
-import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.util.List;
+
 
 @Entity
 @ToString
 @Data
 @Table(name = "customer_order")
-public class Order implements Serializable {
+public class Order {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    private ProductCart productCart;
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<OrderItem> orderItemList;
 
     @OneToOne(mappedBy = "order")
     private ShippingAddress shippingAddress;
@@ -27,4 +29,6 @@ public class Order implements Serializable {
 
     @ManyToOne(cascade = CascadeType.ALL)
     private Customer customer;
+
+    private LocalDateTime createdAt;
 }

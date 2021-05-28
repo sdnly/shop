@@ -10,5 +10,6 @@ public class ShippingAddressDto {
     private String lastName;
     private String street;
     private String zipCode;
+    private String mail;
 }
 

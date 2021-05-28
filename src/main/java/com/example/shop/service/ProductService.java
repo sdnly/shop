@@ -2,11 +2,12 @@ package com.example.shop.service;
 
 import com.example.shop.dto.ProductDto;
 import com.example.shop.dto.ProductMapper;
+import com.example.shop.exception.ProductNotFoundException;
 import com.example.shop.model.Product;
-import com.example.shop.model.ProductCart;
-import com.example.shop.repository.ProductCartRepository;
+import com.example.shop.notification.EmailMessage;
 import com.example.shop.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -16,38 +17,40 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ProductService {
 
-    private final ProductCartService productCartService;
-    private final ProductCartRepository productCartRepository;
     private final ProductRepository productRepository;
     private final ProductMapper productMapper;
+    private final EmailMessage emailMessage;
 
+    public void subscribe(long id) {
+        Product product = productRepository.findById(id).orElseThrow();
+        EmailMessage emailMessage = new EmailMessage();
+        product.registerObserver(emailMessage);
+        log.info("notyfikacja on");
+        product.notifyObservers();
 
-//    public void addToCart(long id, int quantity)  {
-//        Product product = productRepository.findById(id).orElseThrow();
-//        ProductCart byProductId = productCartRepository.findByProductId(id);
-//
-//        productCartRepository.save(byProductId);
-//    }
+    }
 
-//    public ProductCart adding(Product product) {
-//        ProductCart productCart = new ProductCart();
-//        List<Product> productList = productCart.getProductList();
-//        productList.add(product);
-//    }
+    public List<ProductDto> sortedProductsByInStock() {
+        List<Product> all = productRepository.findAll();
+        List<Product> collect = all.stream()
+                .sorted(Comparator.comparing(Product::getInStock))
+                .collect(Collectors.toList());
+        return productMapper.toDtos(collect);
+    }
 
-
-    public List<Product> sortedProductsByName() {
+    public List<ProductDto> sortedProductsByPrice() {
         List<Product> all = productRepository.findAll();
         List<Product> collect = all.stream()
                 .sorted(Comparator.comparing(Product::getPrice))
                 .collect(Collectors.toList());
-        return collect;
+        return productMapper.toDtos(collect);
     }
 
     public ProductDto getSingleProduct(long id) {
-        Product product = productRepository.findById(id).orElseThrow();
+        Product product = productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException(id));
 
         return productMapper.toDto(product);
     }
@@ -64,7 +67,7 @@ public class ProductService {
 
     @Transactional
     public ProductDto editProduct(ProductDto productDto) {
-        Product editedProduct = productRepository.findById(productDto.getId()).orElseThrow();
+        Product editedProduct = productRepository.findById(productDto.getId()).orElseThrow(() -> new ProductNotFoundException(productDto.getId()));
         editedProduct.setDescription(productDto.getDescription());
         editedProduct.setPrice(productDto.getPrice());
         editedProduct.setInStock(productDto.getInStock());

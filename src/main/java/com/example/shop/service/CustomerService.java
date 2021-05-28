@@ -2,11 +2,11 @@ package com.example.shop.service;
 
 import com.example.shop.dto.CustomerDto;
 import com.example.shop.dto.CustomerMapper;
+import com.example.shop.exception.CustomerNotFoundException;
 import com.example.shop.model.Customer;
 import com.example.shop.repository.CustomerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import javax.transaction.Transactional;
 import java.util.List;
 
@@ -37,7 +37,7 @@ public class CustomerService {
 
     @Transactional
     public CustomerDto editCustomer(CustomerDto customerDto) {
-        Customer customer = customerRepository.findById(customerDto.getId()).orElseThrow();
+        Customer customer = customerRepository.findById(customerDto.getId()).orElseThrow(() -> new CustomerNotFoundException(customerDto.getId()));
         customer.setFirstName(customerDto.getFirstName());
         customer.setLastName(customerDto.getLastName());
 

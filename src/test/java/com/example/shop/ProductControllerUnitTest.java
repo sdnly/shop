@@ -1,36 +1,34 @@
 package com.example.shop;
 
-import com.example.shop.controller.ProductController;
-import com.example.shop.dto.ProductDto;
-import com.example.shop.model.Product;
-import com.example.shop.service.ProductService;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 //@RunWith(SpringRunner.class)
 //@WebMvcTest(ProductController.class)
+@AutoConfigureMockMvc
 @SpringBootTest
 public class ProductControllerUnitTest {
 //
-//    @Autowired
-//    private MockMvc mockMvc;
+    @Autowired
+    private MockMvc mockMvc;
 
-    @MockBean
-    ProductService productService;
+//    @MockBean
+//    ProductService productService;
 
     @Test
-    void shouldGetSingleProducts() {
-        ProductDto singleProduct = productService.getSingleProduct(1L);
-
-        assertThat(singleProduct).isNotNull();
-        assertThat(singleProduct.getId()).isEqualTo(1L);
+    void shouldGetSingleProduct() throws Exception {
+        mockMvc.perform(get("/products/1"))
+                .andDo(print())
+                .andExpect(status().is(200))
+                .andExpect(jsonPath("$.id", Matchers.is(1)));
     }
 }
